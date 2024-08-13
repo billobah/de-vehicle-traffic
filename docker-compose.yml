@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database_name
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+  
+  airflow:
+    image: apache/airflow:latest
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://username:password@postgres/database_name
+      AIRFLOW__WEBSERVER__SECRET_KEY: generate_your_own_key #you can use "openssl rand -hex 30" command
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./airflow.cfg:/usr/local/airflow/airflow.cfg
+    depends_on:
+      - postgres
+  
+  dbt:
+    image: fishtownanalytics/dbt:1.0.0
+    volumes:
+      - ./models:/dbt/models
+  
+  redash:
+    image: redash/redash:latest
+    ports:
+        - "5000:5000"
+    environment:
+      REDASH_WEB_WORKERS: 4
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://username:password@postgres/database_name"
+      REDASH_COOKIE_SECRET: generate_your_own_key #you can use "openssl rand -hex 30" command
+    volumes:
+      - ./redash_data:/redash/data
+      - ./redash_config.json:/redash/config.json
+    depends_on:
+      - postgres
+      - redis
+  
+  redis:
+      image: redis:latest
+      restart: always
+
+volumes:
+  postgres_data: # Define volume for PostgreSQL data
+  redash_data:  # Define volume for Redash data
