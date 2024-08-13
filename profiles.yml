@@ -1,0 +1,13 @@
+traffic_dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: username
+      password: password
+      dbname: database_name
+      schema: public
+      threads: 4
+      keepalives_idle: 0

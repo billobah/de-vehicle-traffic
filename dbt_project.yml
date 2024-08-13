@@ -1,0 +1,7 @@
+name: 'traffic_dbt_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'traffic_dbt_project'
+
+source-paths: ["models"]
