@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: track_info_model
+    description: Model for track information
+    columns:
+      - name: track_id
+        description: Unique identifier for the track
+        tests:
+          - unique
+      - name: type
+        description: Type of vehicle
+      - name: traveled_distance
+        description: Distance traveled by the vehicle
+      - name: average_speed
+        description: Average speed of the vehicle
+  - name: trajectory_info_model
+    description: Model for trajectory information
+    columns:
+      - name: track_id
+        description: Unique identifier for the track
+        tests:
+          - unique
+      - name: lat
+        description: Latitude of the vehicle
+      - name: lon
+        description: Longitude of the vehicle
+      - name: speed
+        description: Speed of the vehicle
+      - name: longitudinal_acceleration
+        description: Longitudinal acceleration of the vehicle
+      - name: lateral_acceleration
+        description: Lateral acceleration of the vehicle
+      - name: time
+        description: Time of measurement
